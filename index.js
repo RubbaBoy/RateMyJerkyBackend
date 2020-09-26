@@ -13,6 +13,8 @@ async function handleRequest(request) {
         return review(request)
     } else if (splitted[0] === 'list') {
         return list(request)
+    } else {
+        return new Response('Invalid request')
     }
 }
 
@@ -24,7 +26,7 @@ async function review(request) {
     let json = await request.json();
 
     let location = json['location'];
-    if (!LOCATIONS.contains(location)) {
+    if (!LOCATIONS.includes(location)) {
         return new Response('Invalid location!')
     }
 

@@ -1,0 +1,2 @@
+# Rate My Jerky Backend
+This is a repo used in tandem with [RubbaBoy/RateMyJerky](https://github.com/RubbaBoy/RateMyJerky), an app to rate beef jerky across RIT. This is hosted by [Cloudflare workers](https://workers.cloudflare.com/), so it is extremely fast, robust, and secure. The code is however none of those, but it works. This just stores data in their Key/Value database, and can retrieve them with an optional filter.
