@@ -2,6 +2,9 @@
  * Runnable on Cloudflare Workers
  */
 
+// The same as in the app
+const LOCATIONS = ['The Commons', 'Crossroads Market', 'Crossroads Cafe', 'Vending Machine', 'Corner Store', 'Sol\'s Underground'];
+
 async function handleRequest(request) {
     let url = new URL(request.url)
     let splitted = url.pathname.substr(1).split('/')
@@ -20,10 +23,15 @@ async function review(request) {
 
     let json = await request.json();
 
-    await RATINGS.put('review:' + json['location'] + ':' + Date.now(), JSON.stringify({
+    let location = json['location'];
+    if (!LOCATIONS.contains(location)) {
+        return new Response('Invalid location!')
+    }
+
+    await RATINGS.put('review:' + location + ':' + Date.now(), JSON.stringify({
         'name': json['name'],
         'barcode': json['barcode'],
-        'location': json['location'],
+        'location': location,
         'stars': json['stars'],
         'review': json['review'],
     }))
@@ -43,11 +51,9 @@ async function list(request) {
     let result;
 
     let location = query.get('location')
-    if (location !== null) {
-        console.log('Using loc!');
+    if (location !== null && location.trim() !== '') {
         result = await RATINGS.list({'prefix': 'review:' + location + ':'})
     } else {
-        console.log('Searching all');
         result = await RATINGS.list()
     }
 
